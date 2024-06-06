@@ -29,52 +29,6 @@ function Timetable(props) {
   );
 }
 
-function Footer() {
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [weather, setWeather] = useState(null);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const apiKey = 'f813d4c006fc5112a174c82c210070ad';
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Changwon&appid=${apiKey}&units=metric`);
-        const data = await response.json();
-        setWeather(data);
-      } catch (error) {
-        console.error('Error fetching weather:', error);
-      }
-    };
-
-    fetchWeather();
-  }, []);
-
-  return (
-    <footer className="footer">
-      <div className="right">
-        현재 시간: {currentTime.toLocaleTimeString()}
-      </div>
-      <div className="right">
-        {weather ? (
-          <div>
-            <div>현재 온도: {weather.main.temp}°C</div>
-            <div>날씨: {weather.weather[0].description}</div>
-          </div>
-        ) : (
-          <div>날씨 정보를 불러오는 중...</div>
-        )}
-      </div>
-    </footer>
-  );
-}
-
 function ImageSlider() {
   const [images, setImages] = useState([]);
 
@@ -145,6 +99,53 @@ function Headline() {
   );
 }
 
+function Footer() {
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [weather, setWeather] = useState(null);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const apiKey = 'f813d4c006fc5112a174c82c210070ad';
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Changwon&appid=${apiKey}&units=metric`);
+        const data = await response.json();
+        setWeather(data);
+      } catch (error) {
+        console.error('Error fetching weather:', error);
+      }
+    };
+
+    fetchWeather();
+  }, []);
+
+  return (
+    <footer className="footer">
+      <div className="right">
+        현재 시간: {currentTime.toLocaleTimeString()}
+      </div>
+      <div className="right">
+        {weather ? (
+          <div>
+            <div>현재 온도: {weather.main.temp}°C</div>
+            <div>날씨: {weather.weather[0].description}</div>
+          </div>
+        ) : (
+          <div>날씨 정보를 불러오는 중...</div>
+        )}
+      </div>
+    </footer>
+  );
+}
+
+
 function App() {
   const [timetable, setTimetable] = useState([]);
 
@@ -152,6 +153,7 @@ function App() {
     const fetchTimetable = async () => {
       try {
         const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+        //시간표 API받는 곳
         const data = await response.json();
 
         const currentDay = new Date().getDay();
@@ -190,4 +192,4 @@ function App() {
 }
 
 export default App;
-//84, 154줄에 API를 받는 부분이 존재
+//38, 83, 156줄에 API를 받는 부분이 존재
