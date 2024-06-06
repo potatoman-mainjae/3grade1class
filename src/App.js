@@ -31,6 +31,7 @@ function Timetable(props) {
 
 function Footer() {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [weather, setWeather] = useState(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -40,10 +41,35 @@ function Footer() {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const apiKey = 'f813d4c006fc5112a174c82c210070ad';
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Changwon&appid=${apiKey}&units=metric`);
+        const data = await response.json();
+        setWeather(data);
+      } catch (error) {
+        console.error('Error fetching weather:', error);
+      }
+    };
+
+    fetchWeather();
+  }, []);
+
   return (
     <footer className="footer">
       <div className="right">
         현재 시간: {currentTime.toLocaleTimeString()}
+      </div>
+      <div className="right">
+        {weather ? (
+          <div>
+            <div>현재 온도: {weather.main.temp}°C</div>
+            <div>날씨: {weather.weather[0].description}</div>
+          </div>
+        ) : (
+          <div>날씨 정보를 불러오는 중...</div>
+        )}
       </div>
     </footer>
   );
@@ -55,7 +81,8 @@ function ImageSlider() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/photos?_limit=5'); // 예시 API
+        const response = await fetch('https://jsonplaceholder.typicode.com/photos?_limit=5');
+        //윗줄에서 API를받음
         const data = await response.json();
         const imageUrls = data.map(item => item.url);
         setImages(imageUrls);
@@ -76,7 +103,7 @@ function ImageSlider() {
     centerMode: true,
     centerPadding: '30px',
     autoplay: true,
-    autoplaySpeed: 10000, // 10초
+    autoplaySpeed: 10000,
     cssEase: 'linear'
   };
 
@@ -94,19 +121,16 @@ function ImageSlider() {
 }
 
 function Headline() {
-  const [headline, setHeadline] = useState(""); // 헤드라인 상태
+  const [headline, setHeadline] = useState("");
 
   useEffect(() => {
     const fetchHeadline = async () => {
       try {
-        // API에서 헤드라인 데이터 가져오기
-        const response = await fetch('API 주소'); // API 주소를 여기에 넣어주세요
+        const response = await fetch('API 주소'); // API 주소를 여기에 넣어주세요(헤드라인을 받음)
         const data = await response.json();
-        // API에서 받은 데이터를 헤드라인 상태로 설정
         setHeadline(data.headline);
       } catch (error) {
         console.error('Error fetching headline:', error);
-        // 에러 발생 시 기본 텍스트로 설정
         setHeadline("오늘의 주요 뉴스: 기사 제목");
       }
     };
@@ -127,16 +151,12 @@ function App() {
   useEffect(() => {
     const fetchTimetable = async () => {
       try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/posts'); // 예시 API
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts');
         const data = await response.json();
 
-        // 오늘의 요일을 구하기 (0: 일요일, 1: 월요일, ..., 6: 토요일)
         const currentDay = new Date().getDay();
-
-        // 현재 시간을 구하기
         const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-        // 현재 시간과 요일에 해당하는 데이터 필터링
         const filteredTimetable = data.filter(item => {
           const classTime = item.classTime.split('~');
           const startTime = classTime[0].trim();
@@ -162,7 +182,7 @@ function App() {
       <div className="line"></div>
       <div className="line"></div>
       <ImageSlider />
-      <Headline/>
+      <Headline />
       <div className="HeadLine"></div>
       <Footer />
     </div>
@@ -170,3 +190,4 @@ function App() {
 }
 
 export default App;
+//84, 154줄에 API를 받는 부분이 존재
