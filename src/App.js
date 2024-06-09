@@ -147,11 +147,12 @@ function Footer() {
 
 function App() {
   const [timetable, setTimetable] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [dayOfWeek, setDayOfWeek] = useState(new Date().getDay());
 
   useEffect(() => {
     const fetchTimetable = async () => {
       try {
-        const dayOfWeek = new Date().getDay();
         let url = '';
 
         switch (dayOfWeek) {
@@ -189,12 +190,29 @@ function App() {
     };
 
     fetchTimetable();
-  }, []);
+  }, [dayOfWeek]);
+
+  useEffect(() => {
+    if (timetable.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentIndex(prevIndex => {
+          if (prevIndex < timetable.length - 1) {
+            return prevIndex + 1;
+          } else {
+            clearInterval(interval);
+            return prevIndex;
+          }
+        });
+      }, 3000);
+
+      return () => clearInterval(interval);
+    }
+  }, [timetable]);
 
   return (
     <div className="container">
       <Header />
-      <Timetable timetable={timetable} />
+      <Timetable timetable={timetable.slice(0, currentIndex + 1)} />
       <div className="line"></div>
       <div className="line"></div>
       <ImageSlider />
