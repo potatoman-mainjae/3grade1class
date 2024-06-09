@@ -21,7 +21,7 @@ body {
   font-family: 'GmarketSans', sans-serif;
 }
 
-Head {
+.header {
   display: flex;
   align-items: center;
   justify-content: center;
