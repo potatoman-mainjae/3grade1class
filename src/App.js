@@ -15,17 +15,18 @@ function Header() {
 function Timetable(props) {
   return (
     <div className="timetable-container">
-        {props.timetable.length > 0 ? (
-          props.timetable.map((item, index) => (
-            <div className="timetable-row" key={index}>
-              <div>{item.subject}</div>
-              <div>{item.classNumber}</div>
-            </div>
-          ))
-        ) : (
-          <h2>No Timetable</h2>
-        )}
-      </div>
+      {props.timetable.length > 0 ? (
+        props.timetable.map((item, index) => (
+          <div className="timetable-row" key={index}>
+            <div>{item.교시}</div>
+            <div>{item.과목}</div>
+            <div>{item.해당학생}</div>
+          </div>
+        ))
+      ) : (
+        <h2>데이터 없음</h2>
+      )}
+    </div>
   );
 }
 
@@ -36,7 +37,6 @@ function ImageSlider() {
     const fetchImages = async () => {
       try {
         const response = await fetch('https://jsonplaceholder.typicode.com/photos?_limit=5');
-        //윗줄에서 API를받음
         const data = await response.json();
         const imageUrls = data.map(item => item.url);
         setImages(imageUrls);
@@ -80,7 +80,7 @@ function Headline() {
   useEffect(() => {
     const fetchHeadline = async () => {
       try {
-        const response = await fetch('API 주소'); // API 주소를 여기에 넣어주세요(헤드라인을 받음)
+        const response = await fetch('API 주소'); // API 주소를 여기에 넣어주세요
         const data = await response.json();
         setHeadline(data.headline);
       } catch (error) {
@@ -145,31 +145,45 @@ function Footer() {
   );
 }
 
-
 function App() {
   const [timetable, setTimetable] = useState([]);
 
   useEffect(() => {
     const fetchTimetable = async () => {
       try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-        //시간표 API받는 곳
+        const dayOfWeek = new Date().getDay();
+        let url = '';
+
+        switch (dayOfWeek) {
+          case 1: // Monday
+            url = 'https://example.com/api/monday-timetable';
+            break;
+          case 2: // Tuesday
+            url = 'https://example.com/api/tuesday-timetable';
+            break;
+          case 3: // Wednesday
+            url = 'https://example.com/api/wednesday-timetable';
+            break;
+          case 4: // Thursday
+            url = 'https://example.com/api/thursday-timetable';
+            break;
+          case 5: // Friday
+            url = 'https://example.com/api/friday-timetable';
+            break;
+          case 6: // Saturday
+          case 0: // Sunday
+            setTimetable([]);
+            return;
+          default:
+            setTimetable([]);
+            return;
+        }
+
+        const response = await fetch(url);
         const data = await response.json();
-
-        const currentDay = new Date().getDay();
-        const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        const filteredTimetable = data.filter(item => {
-          const classTime = item.classTime.split('~');
-          const startTime = classTime[0].trim();
-          const endTime = classTime[1].trim();
-          const itemDay = item.dayOfWeek;
-          return itemDay === currentDay && startTime <= currentTime && currentTime <= endTime;
-        });
-
-        setTimetable(filteredTimetable);
+        setTimetable(data);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching timetable:', error);
         setTimetable([]);
       }
     };
@@ -192,4 +206,3 @@ function App() {
 }
 
 export default App;
-//38, 83, 156줄에 API를 받는 부분이 존재
