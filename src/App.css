@@ -1,3 +1,4 @@
+/* 폰트 불러오기 */
 @font-face {
   font-family: 'GmarketSans';
   src: url('./fonts/GmarketSansLight.otf') format('opentype');
@@ -14,6 +15,7 @@
   font-weight: 700;
 }
 
+/* 배경색 및 폰트 적용 */
 body {
   background-color: #F0F0F0;
   font-family: 'GmarketSans', sans-serif;
@@ -36,6 +38,7 @@ body {
   margin-top: 40px;
   position: relative;
   background-color: #69CC69;
+  overflow-y: auto; /* 긴 텍스트를 위한 스크롤 바 추가 */
 }
 
 .timetable-row {
@@ -90,11 +93,10 @@ body {
   width: 100%;
   padding: 20px;
   background-color: #DBDBDB;
-  color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: fixed;
   bottom: 0;
-  color: black; /* Ensure the text is readable */
+  color: black;
 }

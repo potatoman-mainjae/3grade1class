@@ -148,7 +148,7 @@ function Footer() {
 function App() {
   const [timetable, setTimetable] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [dayOfWeek, setDayOfWeek] = useState(new Date().getDay());
+  const [dayOfWeek] = useState(new Date().getDay());
 
   useEffect(() => {
     const fetchTimetable = async () => {
