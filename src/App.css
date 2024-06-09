@@ -1,15 +1,22 @@
-@import "~slick-carousel/slick/slick.css";
-@import "~slick-carousel/slick/slick-theme.css";
+@font-face {
+  font-family: 'GmarketSans';
+  src: url('./fonts/GmarketSansLight.otf') format('opentype');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'GmarketSans';
+  src: url('./fonts/GmarketSansMedium.otf') format('opentype');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'GmarketSans';
+  src: url('./fonts/GmarketSansBold.otf') format('opentype');
+  font-weight: 700;
+}
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 1920px;
-  box-sizing: border-box;
-  position: relative;
-  width: 1080px;
-  margin: 0 auto;
+body {
+  background-color: #F0F0F0;
+  font-family: 'GmarketSans', sans-serif;
 }
 
 .header {
@@ -18,21 +25,17 @@
   justify-content: center;
   height: 180px;
   width: 1080px;
-  background-color: #4CAF50;
+  background-color: #1B691B;
   color: white;
-}
-
-.header h1 {
-  font-size: 2rem;
-  margin: 0;
 }
 
 .timetable-container {
   width: 955px;
   height: 280px;
   border: 1px solid #000;
-  margin-top: 40px; /* To ensure space for the lines below */
+  margin-top: 40px;
   position: relative;
+  background-color: #69CC69;
 }
 
 .timetable-row {
@@ -60,7 +63,6 @@
   font-size: 2rem;
 }
 
-
 .slider-container {
   width: 684px;
   height: 968px;
@@ -72,7 +74,7 @@
   width: 684px;
   height: 968px;
   object-fit: cover;
-  margin: 0 10px; /* 간격 유지 */
+  margin: 0 10px;
 }
 
 .slick-slide {
@@ -84,15 +86,15 @@
   transform: scale(1);
 }
 
-
 .footer {
   width: 100%;
   padding: 20px;
-  background-color: #4CAF50;
+  background-color: #DBDBDB;
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: fixed;
   bottom: 0;
+  color: black; /* Ensure the text is readable */
 }
