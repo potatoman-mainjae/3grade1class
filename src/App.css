@@ -64,9 +64,37 @@
 .timetable-row {
   display: flex;
   justify-content: space-between;
-  padding: 10px;
+  align-items: center;
+  padding: 20px; /* 기존 10px에서 두 배로 */
   border-bottom: 1px solid #ccc;
+  height: 60px; /* 기존 높이의 두 배로 설정 */
+  overflow: hidden; /* 텍스트 잘림 처리 */
+  position: relative;
 }
+
+.timetable-item {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  animation: scrollText 6s linear infinite;
+}
+
+@keyframes scrollText {
+  0% {
+    transform: translateX(0%);
+  }
+  50% {
+    transform: translateX(-100%);
+  }
+  50.01% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
 
 /* 라인 스타일 */
 .line {
