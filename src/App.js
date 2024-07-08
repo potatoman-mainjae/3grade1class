@@ -18,9 +18,9 @@ function Timetable(props) {
       {props.timetable.length > 0 ? (
         props.timetable.map((item, index) => (
           <div className="timetable-row" key={index}>
-            <div className="timetable-item">{item.교시}</div>
-            <div className="timetable-item">{item.과목}</div>
-            <div className="timetable-item">{item.해당학생}</div>
+            <h2 className="timetable-item">{item.교시}</h2>
+            <h2 className="timetable-item">{item.과목}</h2>
+            <h2 className="timetable-item">{item.해당학생}</h2>
           </div>
         ))
       ) : (
