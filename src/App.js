@@ -18,9 +18,9 @@ function Timetable(props) {
       {props.timetable.length > 0 ? (
         props.timetable.map((item, index) => (
           <div className="timetable-row" key={index}>
-            <h2 className="timetable-item">{item.교시}</h2>
-            <h2 className="timetable-item">{item.과목}</h2>
-            <h2 className="timetable-item">{item.해당학생}</h2>
+            <div className="timetable-item">{item.교시}</div>
+            <div className="timetable-item">{item.과목}</div>
+            <div className="timetable-item">{item.해당학생}</div>
           </div>
         ))
       ) : (
@@ -57,7 +57,7 @@ function ImageSlider() {
     centerMode: true,
     centerPadding: '30px',
     autoplay: true,
-    autoplaySpeed: 10000,
+    autoplaySpeed: 5000, // 5초로 변경
     cssEase: 'linear'
   };
 
@@ -80,7 +80,7 @@ function Headline() {
   useEffect(() => {
     const fetchHeadline = async () => {
       try {
-        const response = await fetch('API 주소'); // API 주소를 여기에 넣어주세요
+        const response = await fetch('https://api.example.com/headline'); // 실제 API 주소로 변경
         const data = await response.json();
         setHeadline(data.headline);
       } catch (error) {
@@ -150,26 +150,81 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [dayOfWeek] = useState(new Date().getDay());
 
+  const getClassPeriod = (time) => {
+    const periods = [
+      { start: "08:40", end: "09:30", class: 1 },
+      { start: "09:40", end: "10:30", class: 2 },
+      { start: "10:40", end: "11:30", class: 3 },
+      { start: "11:40", end: "12:30", class: 4 },
+      { start: "12:30", end: "13:30", class: "lunch" },
+      { start: "13:30", end: "14:20", class: 5 },
+      { start: "14:30", end: "15:20", class: 6 },
+      { start: "15:30", end: "16:20", class: 7 }
+    ];
+
+    const current = periods.find(period => {
+      const start = new Date();
+      const end = new Date();
+      const [startHour, startMinute] = period.start.split(':');
+      const [endHour, endMinute] = period.end.split(':');
+
+      start.setHours(startHour, startMinute);
+      end.setHours(endHour, endMinute);
+
+      return time.getTime() >= start.getTime() && time.getTime() <= end.getTime();
+    });
+
+    return current ? current.class : null;
+  };
+
+  const fetchTimetable = async (currentClass) => {
+    try {
+      if (currentClass && currentClass !== "lunch") {
+        const response = await fetch(`https://api.example.com/timetable?class=${currentClass}`); // 실제 API 주소로 변경
+        const data = await response.json();
+        setTimetable(data);
+      } else {
+        setTimetable([]);
+      }
+    } catch (error) {
+      console.error('Error fetching timetable:', error);
+      setTimetable([]);
+    }
+  };
+
   useEffect(() => {
-    const fetchTimetable = async () => {
+    const updateCurrentClass = () => {
+      const now = new Date();
+      const currentClassPeriod = getClassPeriod(now);
+      fetchTimetable(currentClassPeriod); // 상태를 설정하는 대신 함수를 직접 호출
+    };
+
+    updateCurrentClass();
+    const timer = setInterval(updateCurrentClass, 60000); // 1분마다 업데이트
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const fetchDailyTimetable = async () => {
       try {
         let url = '';
 
         switch (dayOfWeek) {
           case 1: // Monday
-            url = 'https://example.com/api/monday-timetable';
+            url = 'https://api.example.com/monday-timetable'; // 실제 API 주소로 변경
             break;
           case 2: // Tuesday
-            url = 'https://example.com/api/tuesday-timetable';
+            url = 'https://api.example.com/tuesday-timetable'; // 실제 API 주소로 변경
             break;
           case 3: // Wednesday
-            url = 'https://example.com/api/wednesday-timetable';
+            url = 'https://api.example.com/wednesday-timetable'; // 실제 API 주소로 변경
             break;
           case 4: // Thursday
-            url = 'https://example.com/api/thursday-timetable';
+            url = 'https://api.example.com/thursday-timetable'; // 실제 API 주소로 변경
             break;
           case 5: // Friday
-            url = 'https://example.com/api/friday-timetable';
+            url = 'https://api.example.com/friday-timetable'; // 실제 API 주소로 변경
             break;
           case 6: // Saturday
           case 0: // Sunday
@@ -189,7 +244,7 @@ function App() {
       }
     };
 
-    fetchTimetable();
+    fetchDailyTimetable();
   }, [dayOfWeek]);
 
   useEffect(() => {
@@ -199,8 +254,7 @@ function App() {
           if (prevIndex < timetable.length - 1) {
             return prevIndex + 1;
           } else {
-            clearInterval(interval);
-            return prevIndex;
+            return 0; // 슬라이드가 끝나면 처음으로 돌아감
           }
         });
       }, 3000);
@@ -214,10 +268,8 @@ function App() {
       <Header />
       <Timetable timetable={timetable.slice(0, currentIndex + 1)} />
       <div className="line"></div>
-      <div className="line"></div>
       <ImageSlider />
       <Headline />
-      <div className="HeadLine"></div>
       <Footer />
     </div>
   );

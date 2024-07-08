@@ -65,7 +65,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px; /* 기존 10px에서 두 배로 */
+  padding: 10px;
   border-bottom: 1px solid #ccc;
   height: 60px; /* 기존 높이의 두 배로 설정 */
   overflow: hidden; /* 텍스트 잘림 처리 */
@@ -78,6 +78,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   animation: scrollText 6s linear infinite;
+  font-size: 2rem; /* 폰트 크기를 두 배로 */
+  font-family: 'GmarketSansBold', sans-serif; /* 폰트를 볼드체로 */
 }
 
 @keyframes scrollText {
@@ -94,7 +96,6 @@
     transform: translateX(0%);
   }
 }
-
 
 /* 라인 스타일 */
 .line {
@@ -141,6 +142,7 @@
   height: 1px;
   background-color: #000;
 }
+
 /* 푸터 스타일 */
 .footer {
   width: 100%;
